@@ -1,14 +1,122 @@
-// src/components/JobForm.jsx
+import React, { useState } from "react";
+import {useNavigate} from 'react-router-dom';
+import { useContext } from 'react';
+import { JobContext } from '../context/JobContext';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import React from 'react';
+function JobForm() {
+  const [formData, setFormData] = useState({
+    jobTitle: "",
+    applicationStatus: "",
+    companyName: "",
+    jobPlatform: "",
+    jobType: "",
+    resumeSent: false,
+    location: "",
+    coverLetterSent: false,
+    dateApplied: "",
+    notes: "",
+    followUpDate: "",
+    interviewDate: ""
+  });
 
-const JobForm = () => {
-  // ... your component code
+  const { addJob } = useContext(JobContext);
+  const navigate = useNavigate();
+
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value
+    });
+  };
+
+  const handleSubmit = (e) => {
+   e.preventDefault();
+    addJob(formData);
+    navigate("/dashboard");
+  };
+
   return (
-    <div>
-      <h2>Job Form</h2>
+    <div className="container mt-4">
+      <div className="card shadow p-4">
+        <h2 className="text-center mb-4">Add Job</h2>
+        <form onSubmit={handleSubmit}>
+
+          <div className="mb-3">
+            <label className="form-label">Job Title</label>
+            <input type="text" className="form-control" name="jobTitle" value={formData.jobTitle} onChange={handleChange} />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Company Name</label>
+            <input type="text" className="form-control" name="companyName" value={formData.companyName} onChange={handleChange} />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Job Type</label>
+            <input type="text" className="form-control" name="jobType" value={formData.jobType} onChange={handleChange} />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Location</label>
+            <input type="text" className="form-control" name="location" value={formData.location} onChange={handleChange} />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Date Applied</label>
+            <input type="date" className="form-control" name="dateApplied" value={formData.dateApplied} onChange={handleChange} />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Follow-up Date</label>
+            <input type="date" className="form-control" name="followUpDate" value={formData.followUpDate} onChange={handleChange} />
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Application Status</label>
+            <select className="form-select" name="applicationStatus" value={formData.applicationStatus} onChange={handleChange}>
+              <option value="">--Select--</option>
+              <option value="applied">Applied</option>
+              <option value="interview_scheduled">Interview Scheduled</option>
+              <option value="offer_received">Offer Received</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Job Platform</label>
+            <input type="text" className="form-control" name="jobPlatform" value={formData.jobPlatform} onChange={handleChange} />
+          </div>
+
+          <div className="form-check mb-2">
+            <input className="form-check-input" type="checkbox" name="resumeSent" checked={formData.resumeSent} onChange={handleChange} />
+            <label className="form-check-label">Resume Sent</label>
+          </div>
+
+          <div className="form-check mb-3">
+            <input className="form-check-input" type="checkbox" name="coverLetterSent" checked={formData.coverLetterSent} onChange={handleChange} />
+            <label className="form-check-label">Cover Letter Sent</label>
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Notes/Comments</label>
+            <textarea className="form-control" rows="3" name="notes" value={formData.notes} onChange={handleChange}></textarea>
+          </div>
+
+          <div className="mb-3">
+            <label className="form-label">Interview Date</label>
+            <input type="date" className="form-control" name="interviewDate" value={formData.interviewDate} onChange={handleChange} />
+          </div>
+
+          <div className="text-center">
+            <button type="submit" className="btn btn-success px-4">Add Job</button>
+          </div>
+        </form>
+      </div>
     </div>
   );
-};
+}
 
 export default JobForm;
