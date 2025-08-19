@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {useNavigate} from 'react-router-dom';
 import { useContext } from 'react';
+import supabase from "../helper/supabaseClient";
 import { JobContext } from '../context/JobContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -32,11 +33,59 @@ function JobForm() {
     });
   };
 
-  const handleSubmit = (e) => {
-   e.preventDefault();
-    addJob(formData);
-    navigate("/dashboard");
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // ✅ Get the logged-in user
+  const { data: { user }, error: userError } = await supabase.auth.getUser();
+
+  if (userError) {
+    console.error("Error fetching user:", userError);
+    alert("Could not fetch user. Please log in again.");
+    return;
+  }
+
+  if (!user) {
+    alert("You must be logged in to add a job.");
+    return;
+  }
+
+  // ✅ Map formData (camelCase) → Supabase (snake_case)
+  const jobData = {
+    job_title: formData.jobTitle,
+    company_name: formData.companyName,
+    job_type: formData.jobType,
+    location: formData.location,
+    date_applied: formData.dateApplied,
+    follow_up_date: formData.followUpDate||null,
+    application_status: formData.applicationStatus,
+    job_platform: formData.jobPlatform,
+    resume_sent: formData.resumeSent,
+    cover_letter_sent: formData.coverLetterSent,
+    notes: formData.notes,
+    interview_date: formData.interviewDate||null,
+    user_id: user.id,   // ✅ user.id comes from Supabase auth
   };
+  
+  // ✅ Insert into Supabase
+  const { data, error } = await supabase
+    .from("jobs")
+    .insert([jobData])
+    .select();
+
+  if (error) {
+    console.error("Error adding job:", error);
+    alert("Failed to add job. Please try again.");
+    return;
+  }
+
+  console.log("Job added successfully:", data);
+  addJob(data[0]);
+  navigate("/dashboard");
+};
+
+
 
   return (
     <div className="container mt-4">
