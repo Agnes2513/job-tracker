@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {Link} from 'react-router-dom';
 import { useState } from 'react';
 import supabase from '../helper/supabaseClient'; 
@@ -38,11 +39,13 @@ function Signup(){
     setEmail("");
     setPassword("");
     setConfirmPassword("");
+
   };
 
   return(
     <div className="container mt-5">
       <h2>Signup</h2>
+
       <br></br>
       {message && <div className="alert alert-info">{message}</div>}
       <br></br>
@@ -80,6 +83,7 @@ function Signup(){
     </form>
       <p className="mt-3">
        <span> Already have an account? <Link to="/login">Login</Link></span>
+
       </p>
 
     </div>

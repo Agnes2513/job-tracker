@@ -1,4 +1,5 @@
 import React from "react";
+
 import { useState } from "react";
 import { Link,useNavigate } from 'react-router-dom'
 import supabase from '../helper/supabaseClient';
@@ -28,11 +29,13 @@ function Login(){
     navigate('/dashboard');
     return null;
     }
+
   };
 
   return (
     <div className="container mt-5">
       <h2>Login</h2>
+
       <br />
       {message && <div className="alert alert-info">{message}</div>}
       <br />
@@ -58,6 +61,7 @@ function Login(){
       <button className="btn btn-primary" type="submit">Login</button>
     </form>
     <span>Don't have an account? <Link to="/signup">Signup</Link></span>
+
     </div>
   );
 };

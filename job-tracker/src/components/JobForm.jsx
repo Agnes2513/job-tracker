@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import {useNavigate} from 'react-router-dom';
 import { useContext } from 'react';
-import supabase from '../helper/supabaseClient';
+
+
 import { JobContext } from '../context/JobContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -32,6 +33,7 @@ function JobForm() {
       [name]: type === "checkbox" ? checked : value
     });
   };
+
 
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -83,6 +85,7 @@ function JobForm() {
   addJob(data[0]);
   navigate("/dashboard");
 };
+
 
 
   return (
